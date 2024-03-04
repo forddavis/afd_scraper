@@ -50,6 +50,7 @@ copy.each_with_index do |airport, index|
     ap_text += File.read("/tmp/#{page}.txt")
   end
 
+  next if aptid == "1RL"
   ap_text = ap_text[ap_text.index("(SMK)(PAMK)")..-1] if aptid == "SMK"
   ap_text = ap_text[0..ap_text.index("(SMK)(PAMK)") - 1] if aptid == "KSM"
   ap_text = ap_text.split(/(–\s–)+/)
@@ -58,7 +59,6 @@ copy.each_with_index do |airport, index|
 
   if ap_text.size > 1
     ap_text = ap_text.select { |a| a[0..50].include?("(#{aptid})") }
-    binding.pry if ap_text.size != 1
   end
 
 
@@ -100,14 +100,11 @@ dups.each do |dup|
     final_freqs << freq.first(2)
   end
 
-  binding.pry
   freqs[dup[:aptid]] = final_freqs
 end
 
 
 File.write('freqs.json', freqs.to_json)
-
-binding.pry
 
 atis_a = []
 
